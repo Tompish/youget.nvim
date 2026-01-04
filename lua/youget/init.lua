@@ -19,7 +19,9 @@ M.setup = function(opts)
 	M._options.update_source = opts.update_source or {}
 end
 
-M.Update = function()
+---when standing on a valid package reference in a csproj, this function
+---automatically update it to latest version
+M.update = function()
 
 	local parsed_line = utils.read_current_line()
 	local package_data = utils.Package_data:parse(parsed_line.text)
@@ -46,7 +48,9 @@ M.Update = function()
 
 end
 
-M.Choose = function()
+---when standing on a valid package reference in a csproj, this function
+---displays all versions which can be chosen from
+M.choose = function()
 	local parsed_line = utils.read_current_line()
 	local package_data = utils.Package_data:parse(parsed_line.text)
 
@@ -77,7 +81,8 @@ M.Choose = function()
 	integrations.open_with_results({}, pkgs, entry_mkr, preview, callback)
 end
 
-M.Add = function(opts)
+---Add a package to the csproj file. Can be called from anywhere within a C# project
+M.add = function(opts)
 	opts = opts or {}
 	opts.csproj_path = utils.find_csproj()
 	local bufname = vim.fn.bufname()

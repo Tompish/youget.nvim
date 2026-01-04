@@ -1,7 +1,12 @@
 local Utils= {}
 
+---@class Package_data
+---A class that structures the reference package string in a csproject into a manageable format
 Utils.Package_data = {}
 
+---Parses a package line in a csproj file and returns it as an object
+---@param text string
+---@return Package_data
 function Utils.Package_data:parse(text)
 	local o = {}
 
@@ -25,27 +30,45 @@ function Utils.Package_data:parse(text)
 	return setmetatable(o, { __index = self })
 end
 
+---Updates the version internally of the referenced project
+---@param version string
+---@return Package_data
 function Utils.Package_data:update_version(version)
 	self.elements[self.version_index] = version
 	return self
 end
 
+---Gets the current version of the referenced project
+---@param
+---@return string
 function Utils.Package_data:get_version()
 	return self.elements[self.version_index]
 end
 
+---Gets the current package name of the referenced project
+---@param
+---@return string
 function Utils.Package_data:get_reference()
 	return self.elements[self.ref_index]
 end
 
+---Rebuilds the Package_data into a string that can be directly inserted into the csproj
+---@param
+---@return string
 function Utils.Package_data:to_line()
 	return table.concat(self.elements, '"')
 end
 
+---With a given reference and version, constructs a string that can be directly inserted into the csproj
+---@param reference string: Package name
+---@param version string: Package version
+---@return string
 function Utils.Package_data.construct_new_line(reference, version)
 return '<PackageReference Include="' .. reference ..'" Version="' .. version .. '" />'
 end
 
+---OBSOLETE, finds the csproj-file
+---@return line string
 Utils.find_csproj = function()
 	local home_dir = vim.uv.os_homedir()
 
@@ -66,6 +89,8 @@ Utils.find_csproj = function()
 	return res[1]
 end
 
+---read the line at the cursor and save the text and line number
+---@return table: {line_nr, text}
 Utils.read_current_line = function()
 	local curr_line = {}
 	curr_line = {
@@ -76,6 +101,10 @@ Utils.read_current_line = function()
 	return curr_line
 end
 
+---used as a callback function by telescope, once a user has chosen the result
+---This function uses buffers to add a package reference. It should only be used if 
+---the csproject-file is an active buffer
+---@param entry table: entry is passed by telescope functions
 Utils.add_by_buf = function(entry)
 		entry = entry.value
 		local content = vim.api.nvim_buf_get_lines(0, 1, -1, false)
@@ -106,6 +135,11 @@ Utils.add_by_buf = function(entry)
 			vim.api.nvim_buf_set_lines(0, insert_row, insert_row, nil, rows)
 		end
 
+---used as a callback function by telescope, once a user has chosen the result
+---This function uses dotnet cli to add a package reference. It should only be used if 
+---the csproject-file is an hidden or non existing buffer
+---@param opts table: if a dotnet_path is given in setup
+---@return function
 Utils.gen_add_by_cli = function(opts)
 	return function(entry)
 			entry = entry.value

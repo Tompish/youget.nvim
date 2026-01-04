@@ -1,7 +1,12 @@
 M = {}
 
-M.nuget_search = function(reference, exec, extraArgs)
-	local cli = vim.list_extend({ exec }, extraArgs)
+---Use dotnetcli nuget to search synchronously
+---@param reference string: name of the reference, eg Newtonsoft.Json
+---@param exec string: path to executable or simply dotnet
+---@param extra_args string: extra arguments
+---@return table: stdout of the exec
+M.nuget_search = function(reference, exec, extra_args)
+	local cli = vim.list_extend({ exec }, extra_args)
 	table.insert(cli, reference)
 	local output = vim.system(cli):wait()
 
@@ -12,9 +17,14 @@ M.nuget_search = function(reference, exec, extraArgs)
 	return output.stdout
 end
 
-M.nuget_search_async = function(reference, exec, extraArgs, callback)
+---Use dotnetcli nuget to search asynchronously
+---@param reference string: name of the reference, eg Newtonsoft.Json
+---@param exec string: path to executable or simply dotnet
+---@param extra_args string: extra arguments
+---@param callback string: callback once the cli finishes
+M.nuget_search_async = function(reference, exec, extra_args, callback)
 	--cli list becomes something like { 'dotnet', 'package', 'search', ... }
-	local cli = vim.list_extend({ exec }, extraArgs)
+	local cli = vim.list_extend({ exec }, extra_args)
 	table.insert(cli, reference)
 
 	vim.system(cli, {}, callback)

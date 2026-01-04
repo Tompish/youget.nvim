@@ -10,6 +10,11 @@ local LinesPipe = require("telescope._").LinesPipe
 local make_entry = require "telescope.make_entry"
 local log = require "telescope.log"
 
+---This is a remake of telescopes async job finder.
+---JSON cannot be processed line by line, so this is a modified
+---telescope job that additionally accepts opts.preprocess_res
+---@param opts table: standard telescope opts + preprocess_res
+---@return table table
 local custom_async_job_finder = function(opts)
 	log.trace("Creating custom async_job:", opts)
 	local entry_maker = opts.entry_maker or make_entry.gen_from_string(opts)
@@ -95,6 +100,8 @@ local custom_async_job_finder = function(opts)
 	})
 end
 
+---Wrapper around custom job. Following telescopes way of coding for 
+---easy use
 local new_custom_job = function(command_generator, entry_maker, _, cwd, preprocess_res)
 	return custom_async_job_finder {
 		command_generator = command_generator,
@@ -106,6 +113,12 @@ end
 
 M = {}
 
+---Open a telescope popup with a result set that is already loaded
+---@param opts table: standard telescope opts
+---@param selectables table: list containing the results
+---@param entry_mkr function: fun(selectables) -> { value, display, ordinal }
+---@param preview function: fun(self, state, entry) Defines preview
+---@param callback function: fun(selectedEntry) Called once a user has chosen an option
 M.open_with_results = function(opts, selectables, entry_mkr, preview, callback)
 	pickers.new(opts, {
 		prompt_title = "Versions",
@@ -129,6 +142,13 @@ M.open_with_results = function(opts, selectables, entry_mkr, preview, callback)
 		}):find()
 	end
 
+---Open a telescope popup with a result set that is already loaded
+---@param opts table: standard telescope opts
+---@param entry_mkr function: fun(selectables) -> { value, display, ordinal }
+---@param preproccess_res function: function that processes the result from nuget, before being passed on
+---to telescopes ordinary execution flow
+---@param preview function: fun(self, state, entry) Defines preview
+---@param action function: fun(selectedEntry) Called once a user has chosen an option
 	M.open_live = function(opts, entry_mkr, preproccess_res, preview, action)
 		assert(opts.cli, "Trying to live search nugets without giving a dotnet command!")
 
@@ -173,6 +193,10 @@ M.open_with_results = function(opts, selectables, entry_mkr, preview, callback)
 	:find()
 end
 
+---Generates a previewer that displays whatever table fn returns
+---@param fn function: fn(entry) -> string[] writes each element of returned table on seperate row
+---to the preview buffer. The function should accept whatever was defined as an "entry"
+---@return function
 M.gen_preview_basic = function(fn)
 	return function(self, entry, _)
 		vim.api.nvim_buf_set_lines(self.state.bufnr, 0, -1, false, fn(entry))
