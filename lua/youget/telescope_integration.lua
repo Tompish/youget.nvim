@@ -142,7 +142,8 @@ M.open_with_results = function(opts, selectables, entry_mkr, preview, callback)
 		}):find()
 	end
 
----Open a telescope popup with a result set that is already loaded
+---Open a telescope popup with a result set that is loaded asynchronosly with live updates
+---from user inputs
 ---@param opts table: standard telescope opts
 ---@param entry_mkr function: fun(selectables) -> { value, display, ordinal }
 ---@param preproccess_res function: function that processes the result from nuget, before being passed on
@@ -177,7 +178,6 @@ M.open_with_results = function(opts, selectables, entry_mkr, preview, callback)
 		finder = nuget_finder,
 		sorter = conf.generic_sorter(opts),
 		attach_mappings = function(prompt_bufnr, _)
-			--actions.select_default:replace(action(prompt_bufnr))
 			actions.select_default:replace(
 				function()
 					actions.close(prompt_bufnr)

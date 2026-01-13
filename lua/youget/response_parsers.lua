@@ -3,20 +3,27 @@ local response_parsers = {}
 ---Iterate different json objects return from nuget and 
 ---structure them into tables suitable for this library
 
+local reverse = function(tbl)
+	r = {}
+	for i = #tbl, 1, -1 do
+    table.insert(r, tbl[i])
+end
+
+return r
+end
+
 ---Result returned from --verbosity minimal
 ---@param nuget_json table: a json object transformed into a lua table
 ---@return table: { id: string, version: string, source: string}
 response_parsers.parse_minimal = function(nuget_json)
 		local o = {}
-		local index = 1
 		for _, source in ipairs(nuget_json.searchResult) do
 			for _, pkg in ipairs(source.packages) do
-				o[index] = {
+				table.insert(o, {
 					id = pkg.id,
 					version = pkg.latestVersion,
 					source = source.sourceName,
-				}
-				index = index+1
+				})
 			end
 		end
 		return o
@@ -41,10 +48,9 @@ end
 ---@return table: { id: string, version: string, source: string, downloads: string|number, owners: string, project_url: string, description: string}
 response_parsers.parse_detailed = function(nuget_json)
 		local o = {}
-		local index = 1
 		for _, source in ipairs(nuget_json.searchResult) do
 			for _, pkg in ipairs(source.packages) do
-				o[index] = {
+				table.insert(o, {
 					id = pkg.id,
 					version = pkg.latestVersion,
 					source = source.sourceName,
@@ -52,23 +58,22 @@ response_parsers.parse_detailed = function(nuget_json)
 					owners = pkg.owners or '-',
 					project_url = pkg.projectUrl or '-',
 					description = pkg.description or 'No description found'
-				}
-				index = index+1
+				})
 			end
 		end
 
 		return o
 	end
 
+
 ---Result returned from --exact-match
 ---@param nuget_json table: a json object transformed into a lua table
 ---@return table: { id: string, version: string, source: string, downloads: string|number, owners: string, project_url: string, description: string}
 response_parsers.parse_exact_match = function(nuget_json)
 		local o = {}
-		local index = 1
 		for _, source in ipairs(nuget_json.searchResult) do
 			for _, pkg in ipairs(source.packages) do
-				o[index] = {
+				table.insert(o, {
 					id = pkg.id,
 					version = pkg.version,
 					source = source.sourceName,
@@ -76,11 +81,11 @@ response_parsers.parse_exact_match = function(nuget_json)
 					owners = pkg.owners or '-',
 					project_url = pkg.projectUrl or '-',
 					description = pkg.description or 'No description found'
-				}
-				index = index+1
+				})
 			end
 		end
 
-		return o
+		return reverse(o)
 	end
+
 return response_parsers

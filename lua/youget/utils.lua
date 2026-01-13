@@ -67,28 +67,6 @@ function Utils.Package_data.construct_new_line(reference, version)
 return '<PackageReference Include="' .. reference ..'" Version="' .. version .. '" />'
 end
 
----OBSOLETE, finds the csproj-file
----@return line string
-Utils.find_csproj = function()
-	local home_dir = vim.uv.os_homedir()
-
-	local res = vim.fs.find(function(name, _)
-		local s, _ = string.find(name, '.csproj')
-		return s ~= nil
-	end,
-	{
-		upward = true,
-		type = 'file',
-		limit = 1,
-		stop = home_dir
-	})
-
-	if #res == 0 then
-		error("Cannot find any csproj file")
-	end
-	return res[1]
-end
-
 ---read the line at the cursor and save the text and line number
 ---@return table: {line_nr, text}
 Utils.read_current_line = function()
@@ -114,7 +92,7 @@ Utils.add_by_buf = function(entry)
 		for i, line in ipairs(content) do
 			local s_i = string.find(line, '<PackageRefe')
 			if s_i then
-				insert_row = i-1
+				insert_row = i
 				local tabstop = string.sub(line, 1, s_i-1)
 				table.insert(rows, tabstop .. Utils.Package_data.construct_new_line(entry.id, entry.version))
 				break

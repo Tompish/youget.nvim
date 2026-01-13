@@ -13,10 +13,10 @@ M._options = {
 }
 
 M.setup = function(opts)
-	if opts.include_prerelease ~= false then
+	if opts.include_prerelease == true then
 		table.insert(M._options.cli, '--prerelease')
 	end
-	M._options.update_source = opts.update_source or {}
+	M._options.dotnet_path = opts.dotnet_path or 'dotnet'
 end
 
 ---when standing on a valid package reference in a csproj, this function
@@ -84,7 +84,10 @@ end
 ---Add a package to the csproj file. Can be called from anywhere within a C# project
 M.add = function(opts)
 	opts = opts or {}
-	opts.csproj_path = utils.find_csproj()
+	opts.dotnet_path = M._options.dotnet_path
+	opts.cli = vim.list_extend({}, M._options.cli)
+	vim.list_extend(opts.cli, { '--verbosity', 'detailed' })
+
 	local bufname = vim.fn.bufname()
 	local s = string.find(bufname, '.csproj')
 
@@ -93,7 +96,7 @@ M.add = function(opts)
 	if s then
 		action = utils.add_by_buf
 	else
-		action = utils.add_by_cli(opts)
+		action = utils.gen_add_by_cli(opts)
 	end
 
 	local list_package = function(package)
@@ -110,8 +113,6 @@ local preprocess_data = function(data)
 	return pkgs
 end
 
-opts.cli = vim.list_extend({}, M._options.cli)
-vim.list_extend(opts.cli, { '--verbosity', 'detailed' })
 
 local preview = integrations.gen_preview_basic(function(entry)
 	local description = vim.fn.split(entry.value.description, '\n')

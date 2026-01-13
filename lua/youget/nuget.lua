@@ -21,7 +21,7 @@ end
 ---@param reference string: name of the reference, eg Newtonsoft.Json
 ---@param exec string: path to executable or simply dotnet
 ---@param extra_args string: extra arguments
----@param callback string: callback once the cli finishes
+---@param callback function: callback once the cli finishes
 M.nuget_search_async = function(reference, exec, extra_args, callback)
 	--cli list becomes something like { 'dotnet', 'package', 'search', ... }
 	local cli = vim.list_extend({ exec }, extra_args)
