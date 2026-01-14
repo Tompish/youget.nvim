@@ -1,7 +1,7 @@
 # YOUGET.nvim
 
 YOUGET is a plugin that integrates nuget package managing into neovim.
-It aims to be simple and elegant, merging with the rest of neovims features.
+It aims to be simple and elegant, in the spirit of the rest of neovims features.
 
 ## Prerequisites
 - **dotnet cli** must be installed.
@@ -20,7 +20,7 @@ From anywhere within the project, live search and add a new package
 ## Configuration
 ```lua
 require('youget.nvim').setup{
-    dotnet_path = "", --only necessary if it is not on path
+    dotnet_path = "/path/to/dotnet", --only necessary if it is not on path
     include_prerelease = true --Should prereleases of nuget packages be included?
 }
 ```
