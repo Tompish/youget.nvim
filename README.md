@@ -9,13 +9,13 @@ It aims to be simple and elegant, in the spirit of the rest of neovims features.
 
 ## Features
 Update the package under the cursor to the latest version
-![Preview](https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExMHpncHRodHJuZ2h3eTIxOHF1enl2c2FuN2dha3dkdWc3NDBpdzc2eCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/gElj3vJpCSMEnKIwI0/giphy.gif)
+![Preview](https://files.catbox.moe/9rk765.gif)
 
 Choose any available version for the package under the cursor
-![Preview](https://media1.giphy.com/media/v1.Y2lkPTc5MGI3NjExeHpoc2dpMnE2dHpzcThtdXh6ejFqMzVmdjFhNWk2cjBlNmNlOHVwZSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/VGkPO2ep6nezxG9v19/giphy.gif)
+![Preview](https://files.catbox.moe/4zigh1.gif)
 
 From anywhere within the project, live search and add a new package
-![Preview](https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExc3pjYzB4Yjg0eTRrNHF2Z2pxMnE1cTIyanJmcmwxN3ZlMHd5dmVuMiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/UTNHuDTqPCZyQeiFEP/giphy.gif)
+![Preview](https://files.catbox.moe/53n1cg.gif)
 
 ## Configuration
 ```lua
