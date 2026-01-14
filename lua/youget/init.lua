@@ -63,7 +63,13 @@ M.choose = function()
 	local pkgs = parser.parse_exact_match(decoded_response)
 
 	local preview = integrations.gen_preview_basic(function(entry)
-		return { entry.value.source, entry.value.description }
+
+	local description = vim.split(entry.value.description, '\n')
+	return vim.list_extend({
+	'ProjectUrl: ' .. entry.value.project_url
+	,''
+	, '-------------------Description-------------------'
+	}, description)
 	end)
 	local entry_mkr = function(package)
 		return {
@@ -115,7 +121,7 @@ end
 
 
 local preview = integrations.gen_preview_basic(function(entry)
-	local description = vim.fn.split(entry.value.description, '\n')
+	local description = vim.split(entry.value.description, '\n')
 	return vim.list_extend({ 'Owners: ' .. entry.value.owners
 	,''
 	, 'Downloads: ' .. entry.value.downloads
