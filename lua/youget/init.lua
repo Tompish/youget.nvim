@@ -17,6 +17,7 @@ M.setup = function(opts)
 		table.insert(M._options.cli, '--prerelease')
 	end
 	M._options.dotnet_path = opts.dotnet_path or 'dotnet'
+	M._options.add_mkr_entry = utils.gen_add_nuget_mkr(opts.show_source or false)
 end
 
 ---when standing on a valid package reference in a csproj, this function
@@ -105,13 +106,7 @@ M.add = function(opts)
 		action = utils.gen_add_by_cli(opts)
 	end
 
-	local list_package = function(package)
-		return {
-			value = package,
-			display = package.source .. ' ' .. package.id,
-			ordinal = package.id
-		}
-	end
+	local list_package = M._options.add_mkr_entry or utils.gen_add_nuget_mkr(false)
 
 local preprocess_data = function(data)
 	local result = vim.json.decode(data)

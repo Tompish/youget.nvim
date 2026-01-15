@@ -136,4 +136,27 @@ Utils.gen_add_by_cli = function(opts)
 		end
 	end
 
+	---Generate a maker_entry for adding nuger picker.
+	---@param include_source boolean
+	---@return function
+	Utils.gen_add_nuget_mkr = function(include_source)
+		if include_source then
+			return function(package)
+				return {
+					value = package,
+					display = package.source .. ' ' .. package.id,
+					ordinal = package.id
+				}
+			end
+		else
+			return function(package)
+				return {
+					value = package,
+					display = package.id,
+					ordinal = package.id
+				}
+			end
+		end
+	end
+
 return Utils
