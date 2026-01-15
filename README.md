@@ -1,7 +1,7 @@
 # YOUGET.nvim
 
-YOUGET is a plugin that integrates nuget package managing into neovim.
-It aims to be simple and elegant, in the spirit of the rest of neovims features.
+YOUGET is a neovim plugin that makes managing nuget packages real easy!
+In the spirit of neovim, it aims to be simple and elegant.
 
 ## Prerequisites
 - **dotnet cli** must be installed.
@@ -22,6 +22,7 @@ From anywhere within the project, live search and add a new package
 require('youget.nvim').setup{
     dotnet_path = "/path/to/dotnet", --only necessary if it is not on path
     include_prerelease = true --Should prereleases of nuget packages be included?
+    show_source = true --Show package source?
 }
 ```
 
@@ -53,9 +54,9 @@ config = function()
 
     youget.setup{ include_prerelease = true }
 
-    vim.keymap.set('n', '<leader>nu', require("youget").update, {})
-	vim.keymap.set('n', '<leader>na', require("youget").add, {})
-	vim.keymap.set('n', '<leader>nc', require("youget").choose, {})
+    vim.keymap.set('n', '<leader>nu', youget.update, {})
+	vim.keymap.set('n', '<leader>na', youget.add, {})
+	vim.keymap.set('n', '<leader>nc', youget.choose, {})
 end
 }
 ```
