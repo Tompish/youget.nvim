@@ -75,7 +75,7 @@ M.choose = function()
 		return {
 			value = package,
 			display = package.id .. ' ' .. package.version,
-			ordinal = package.id
+			ordinal = package.version
 		}
 	end
 
