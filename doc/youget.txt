@@ -1,0 +1,41 @@
+================================================================================
+INTRODUCTION                                                    *youget.nvim*
+
+youget.nvim is a plugin for handling nuget packages. 
+
+SETUP
+
+The setup function accepts a single table. It is not mandatory to call
+setup. 
+There are no default keybindings! These must be mapped like the rest
+of your keybinding by neovims keymaps. E.g.
+>
+vim.keymap.set('n', '<leader>nu', require('youget').update, {})
+<
+
+FUNCTIONALITY
+
+youget.add														*youget.add()*
+	Adds a new nuget package to the project. It is done by opening a fuzzy search window
+	that displays available packages. If there are multiple project files
+	in a solution, the project file where packages are to be added must be
+	the active buffer.
+>
+require('youget').add()
+<
+
+youget.update														*youget.update()*
+	Updates a package to the latest available version. The line under the cursor
+	is the target of the update. 
+	This is useful when bumping nuget references from a private artifactory.
+>
+require('youget').update()
+<
+
+youget.choose														*youget.choose()*
+	Choose the package version. The line under the cursor is the target of
+	the update. Opens a fuzzy search window that displays available versions.
+
+>
+require('youget').choose()
+<
